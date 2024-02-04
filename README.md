@@ -15,7 +15,7 @@ The format is: `<lang>,<url>,<branch>,<sourcedir>`
 <sourcedir> : The source directory (it should contain `parser.c`)
 ```
 
-Example:
+Example `languages_config.txt`:
 
 ``` text
 bash,https://github.com/tree-sitter/tree-sitter-bash,,
