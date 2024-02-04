@@ -1,10 +1,10 @@
-Download and compile treesitter language grammars in parallel.
+### Download and compile treesitter language grammars in parallel.
 
-1. Clone this repository.
+#### 1. Clone this repository.
 
 `git clone git@github.com:davidhaley/tree-sitter-grammar-dl.git`
 
-2. Create a `languages_config.txt` file in the repo directory.
+#### 2. Create a `languages_config.txt` file in the repo directory.
 
 The format is: `<lang>,<url>,<branch>,<sourcedir>`
 
@@ -44,7 +44,7 @@ yaml,https://github.com/ikatyang/tree-sitter-yaml,,
 zig,https://github.com/maxxnino/tree-sitter-zig,,
 ```
 
-3. Execute: `./run.sh`
+#### 3. Execute: `./run.sh`
 
 Each successful job will output the compiled dynamic library file into the `./dist` folder, and remove the cloned repository directory.
 
@@ -75,3 +75,10 @@ libtree-sitter-typescript.so
 libtree-sitter-yaml.so
 libtree-sitter-zig.so
 ```
+
+
+### Additional resources:
+
+1. [Doom Emacs - Tree-sitter](https://github.com/doomemacs/doomemacs/blob/master/modules/tools/tree-sitter/README.org)
+2. [Emacs - Tree-sitter Starter Guide](https://git.savannah.gnu.org/cgit/emacs.git/tree/admin/notes/tree-sitter/starter-guide?h=feature/tree-sitter)
+3. [Mastering Emacs - How to Get Started with Tree-sitter](https://www.masteringemacs.org/article/how-to-get-started-tree-sitter)
