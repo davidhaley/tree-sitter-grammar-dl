@@ -30,7 +30,8 @@ jsdoc,https://github.com/tree-sitter/tree-sitter-jsdoc,,
 json,https://github.com/tree-sitter/tree-sitter-json,,
 make,https://github.com/alemuller/tree-sitter-make,,
 markdown,https://github.com/ikatyang/tree-sitter-markdown,,
-ocaml,https://github.com/tree-sitter/tree-sitter-ocaml,,interface/src
+ocaml,https://github.com/tree-sitter/tree-sitter-ocaml,,ocaml/src
+ocaml_interface,https://github.com/tree-sitter/tree-sitter-ocaml,,interface/src
 org,https://github.com/milisims/tree-sitter-org,,
 python,https://github.com/tree-sitter/tree-sitter-python,,
 regex,https://github.com/tree-sitter/tree-sitter-regex,,
