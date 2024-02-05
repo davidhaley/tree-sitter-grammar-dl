@@ -77,9 +77,6 @@ libtree-sitter-yaml.so
 libtree-sitter-zig.so
 ```
 
-#### Possible issues
-- The OCaml repo is a little odd in that it has two parsers ('ocaml' and 'interface'). Currently, 
-
 #### 4. Emacs config
 
 **(REQUIRED)** Tell tree-sitter where the `.so` files are:
