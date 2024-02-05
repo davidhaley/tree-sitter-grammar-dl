@@ -77,6 +77,83 @@ libtree-sitter-yaml.so
 libtree-sitter-zig.so
 ```
 
+#### Possible issues
+- The OCaml repo is a little odd in that it has two parsers ('ocaml' and 'interface'). Currently, 
+
+#### 4. Emacs config
+
+**(REQUIRED)** Tell tree-sitter where the `.so` files are:
+
+``` emacs-lisp
+(setq treesit-extra-load-path (list "<path_to_so_files>"))
+```
+
+**(OPTIONAL)** Helper functions to see which files loaded successfully:
+
+``` emacs-lisp
+(defun get-tree-sitter-languages-from-directory (directories)
+    "List Tree-sitter language symbols based on .so files in DIRECTORIES."
+    (let (languages)
+        (when (and directories (listp directories))
+            (dolist (directory directories)
+                (when (file-directory-p directory)
+                    (let ((files (directory-files directory t "libtree-sitter-.*\\.so$"))
+                             (prefix "libtree-sitter-")
+                             (suffix ".so"))
+                        (dolist (file files)
+                            (let* ((filename (file-name-nondirectory file))
+                                      (lang (replace-regexp-in-string (regexp-quote suffix) ""
+                                                (replace-regexp-in-string (regexp-quote prefix) "" filename))))
+                                (push (intern lang) languages)))))))
+        languages))
+
+(defun check-treesitter-grammar-availability ()
+    "Check availability of Tree-sitter grammars for languages in treesit-extra-load-path."
+    (interactive)
+    (let ((languages (get-tree-sitter-languages-from-directory treesit-extra-load-path)))
+        (dolist (lang languages)
+            (if (treesit-language-available-p lang)
+                (message "%s: supported" lang)
+                (message "%s: not supported" lang)))))
+
+```
+
+
+`M-x check-treesitter-grammar-availability`, and then check output in the `*messages*` buffer.
+
+``` text
+zig: supported
+yaml: supported
+typescript: supported
+tsx: supported
+toml: supported
+svelte: supported
+sql: supported
+rust: supported
+regex: supported
+python: supported
+org: supported
+ocaml_interface: supported
+ocaml: not supported
+markdown: supported
+make: supported
+json: supported
+jsdoc: supported
+javascript: supported
+html: supported
+go: supported
+elisp: supported
+css: supported
+cmake: supported
+c: supported
+bash: supported
+```
+
+#### Possible issues
+
+The OCaml repo is a little odd in that it contains two parsers. Tree-sitter is
+telling me that `ocaml_interface` is supported, but `ocaml` is not. I haven't
+tested them out yet.
 
 ### Additional resources:
 
