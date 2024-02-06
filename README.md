@@ -1,23 +1,38 @@
 ### Download and compile treesitter language grammars in parallel.
 
+This script automates the process of cloning, building, and compiling
+Tree-Sitter grammars for various programming languages.
+
+[Doom Emacs will support the native tree-sitter sometime, likely before the end
+of February 2024.](https://github.com/doomemacs/doomemacs/issues/7623#issuecomment-1926171890)
+
+Requirements
+
+```text
+bash
+git
+GNU parallel
+gcc or clang
+```
+
 #### 1. Clone this repository.
 
 `git clone git@github.com:davidhaley/tree-sitter-grammar-dl.git`
 
 #### 2. Create a `languages_config.txt` file in the repo directory.
 
-The format is: `<lang>,<url>,<branch>,<sourcedir>`
+The format is: `<lang>,<url>,<branch_or_commit_hash>,<repo_src_dir>`
 
-``` text
-     <lang> : The language
-      <url> : The repository URL for the source code of the language's tree-sitter grammar
-   <branch> : The branch to check out before the compilation proceeds
-<sourcedir> : The source directory (it should contain `parser.c`)
+```text
+                    <lang> : The language
+                     <url> : The URL of the Tree-Sitter grammar repository
+   <branch_or_commit_hash> : (optional) A branch name or commit hash to check out after cloning. Defaults to the repository's default branch.
+            <repo_src_dir> : (optional) The directory of the grammar source files (contains `parser.c`). Defaults to 'src', and then '.'.
 ```
 
 Example `languages_config.txt`:
 
-``` text
+```text
 bash,https://github.com/tree-sitter/tree-sitter-bash,,
 c,https://github.com/tree-sitter/tree-sitter-c,,
 cmake,https://github.com/uyha/tree-sitter-cmake,,
@@ -49,7 +64,7 @@ zig,https://github.com/maxxnino/tree-sitter-zig,,
 
 Each successful job will output the compiled dynamic library file into the `./dist` folder, and remove the cloned repository directory.
 
-``` sh
+```sh
 $ ls dist/
 libtree-sitter-bash.so
 libtree-sitter-c.so
@@ -81,13 +96,13 @@ libtree-sitter-zig.so
 
 **(REQUIRED)** Tell tree-sitter where the `.so` files are:
 
-``` emacs-lisp
+```emacs-lisp
 (setq treesit-extra-load-path (list "<path_to_so_files>"))
 ```
 
 **(OPTIONAL)** Helper functions to see which files loaded successfully:
 
-``` emacs-lisp
+```emacs-lisp
 (defun get-tree-sitter-languages-from-directory (directories)
     "List Tree-sitter language symbols based on .so files in DIRECTORIES."
     (let (languages)
@@ -115,10 +130,9 @@ libtree-sitter-zig.so
 
 ```
 
-
 `M-x check-treesitter-grammar-availability`, and then check output in the `*messages*` buffer.
 
-``` text
+```text
 zig: supported
 yaml: supported
 typescript: supported

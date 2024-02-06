@@ -8,6 +8,26 @@ config_file="languages_config.txt"
 
 export workingdir soext
 
+# Function to attempt checkout and fetch commit if necessary
+attempt_checkout() {
+    local dir=$1
+    local ref=$2
+    log "Attempting to checkout $ref..."
+    if ! (cd "$dir" && git checkout "$ref" --quiet 2>/dev/null); then
+        log "$ref not found in shallow clone, fetching branch..."
+        # Fetch the branch explicitly and then attempt to checkout using FETCH_HEAD
+        if ! (cd "$dir" && git fetch origin "$ref" && git checkout FETCH_HEAD --quiet); then
+            log "Failed to fetch or checkout $ref. The reference may not exist or is not accessible."
+            return 1
+        else
+            log "Successfully fetched and checked out $ref."
+        fi
+    else
+        log "Successfully checked out $ref."
+    fi
+    return 0
+}
+
 process_language() {
     local lang=$1
     local url=$2
@@ -17,22 +37,29 @@ process_language() {
     printf "\nProcessing $lang from $url\n"
     clone_dir="${workingdir}/${lang}_grammar"
 
+    log() {
+        echo "$1"
+    }
+
     # Check and clean up the existing directory
     if [ -d "$clone_dir" ]; then
-        echo "Cleaning up existing directory for $lang..."
+        log "Cleaning up existing directory for $lang..."
         rm -rf "$clone_dir"
     fi
 
-    echo "Cloning $lang grammar..."
-    if [ -z "$branch" ]; then
-        git clone --depth 1 "$url" "$clone_dir" --quiet
-    else
-        git clone --single-branch --branch "$branch" "$url" "$clone_dir" --quiet
+    log "Cloning $lang grammar..."
+    git clone --depth 1 "$url" "$clone_dir" --quiet
+    if [ $? -ne 0 ]; then
+        log "Failed to clone $lang, skipping build..."
+        return
     fi
 
-    if [ $? -ne 0 ]; then
-        echo "Failed to clone $lang, skipping build..."
-        return
+    # Check out the specified branch or commit hash if provided
+    if [ -n "$branch" ]; then
+        if ! attempt_checkout "$clone_dir" "$branch"; then
+            log "Failed to checkout $branch for $lang, skipping build..."
+            return
+        fi
     fi
 
     # Navigate to the source directory if specified
@@ -46,11 +73,11 @@ process_language() {
 
     # Ensure parser.c exists before attempting to compile
     if ! test -f parser.c; then
-        echo "parser.c not found for $lang, skipping build..."
+        log "parser.c not found, skipping build..."
         return
     fi
 
-    echo "Building $lang..."
+    log "Building..."
     cc -fPIC -c -I. parser.c
     # Compile scanner.c if it exists
     if test -f scanner.c; then
@@ -71,7 +98,7 @@ process_language() {
         mkdir -p "${workingdir}/dist"
         cp "libtree-sitter-${lang}.${soext}" "${workingdir}/dist"
     else
-        echo "Compilation failed for $lang, no object files to link..."
+        log "Compilation failed, no object files to link..."
         return
     fi
 
@@ -79,10 +106,11 @@ process_language() {
     cd "${workingdir}"
     rm -rf "$clone_dir"
 
-    echo "$lang build complete."
+    log "Build complete."
 }
 
 export -f process_language
+export -f attempt_checkout
 
 # Use GNU parallel to read each line from the config and process it in parallel
 parallel --colsep ',' process_language ::: $(cat "$config_file")
