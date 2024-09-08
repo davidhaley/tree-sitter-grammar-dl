@@ -35,6 +35,7 @@ Example `languages_config.txt`:
 ```text
 bash,https://github.com/tree-sitter/tree-sitter-bash,,
 c,https://github.com/tree-sitter/tree-sitter-c,,
+cpp,https://github.com/tree-sitter/tree-sitter-cpp,,
 cmake,https://github.com/uyha/tree-sitter-cmake,,
 css,https://github.com/tree-sitter/tree-sitter-css,,
 elisp,https://github.com/Wilfred/tree-sitter-elisp,,
@@ -54,8 +55,8 @@ rust,https://github.com/tree-sitter/tree-sitter-rust,,
 sql,https://github.com/DerekStride/tree-sitter-sql,gh-pages,
 svelte,https://github.com/Himujjal/tree-sitter-svelte,,
 toml,https://github.com/tree-sitter/tree-sitter-toml,,
-tsx,https://github.com/tree-sitter/tree-sitter-typescript,master,tsx/src
-typescript,https://github.com/tree-sitter/tree-sitter-typescript,master,typescript/src
+tsx,https://github.com/tree-sitter/tree-sitter-typescript,eb6b845dee9ee22987262699a152312604313662,tsx/src
+typescript,https://github.com/tree-sitter/tree-sitter-typescript,eb6b845dee9ee22987262699a152312604313662,typescript/src
 yaml,https://github.com/ikatyang/tree-sitter-yaml,,
 zig,https://github.com/maxxnino/tree-sitter-zig,,
 ```
