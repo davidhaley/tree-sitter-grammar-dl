@@ -59,6 +59,7 @@ tsx,https://github.com/tree-sitter/tree-sitter-typescript,eb6b845dee9ee229872626
 typescript,https://github.com/tree-sitter/tree-sitter-typescript,eb6b845dee9ee22987262699a152312604313662,typescript/src
 yaml,https://github.com/ikatyang/tree-sitter-yaml,,
 zig,https://github.com/maxxnino/tree-sitter-zig,,
+odin,https://github.com/tree-sitter-grammars/tree-sitter-odin,,
 ```
 
 #### 3. Execute: `./run.sh`
